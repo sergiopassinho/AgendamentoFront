@@ -30,7 +30,10 @@ const MeetingScheduler = () => {
         const response = await axios.get('/agendamentos');
         setSchedulings(response.data);
       } catch (e) {
-        console.log(e);
+        notification.error({
+          message: 'Erro',
+          description: 'Ocorreu um erro ao buscar agendamentos',
+        });
       }
     }
 
@@ -104,6 +107,11 @@ const MeetingScheduler = () => {
           duracao: selectDuration
         }
       );
+
+      notification.success({
+        message: 'Sucesso',
+        description: 'O agendamento foi realizado com sucesso!',
+      });
 
       setSelectDuration(null);
       setSelectedDate(undefined);
