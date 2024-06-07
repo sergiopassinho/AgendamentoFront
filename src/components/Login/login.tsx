@@ -1,18 +1,30 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Card, Layout } from 'antd';
+import { Form, Input, Button, Checkbox, Card, Layout, notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { GoogleLogin } from 'react-google-login';
+import axios from '../../utils/axios';
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 
 const Login: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-    // Aqui você pode adicionar a lógica de autenticação com o backend
-  };
+  const navigate = useNavigate();
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+  const onFinish = async (values: any) => {
+    try {
+      await axios.post('/autenticar',
+      {
+        usuario: values.username,
+        senha: values.password
+      });
+
+      navigate('/agendamento');
+
+    } catch (e) {
+      notification.error({
+        message: 'Erro',
+        description: 'Ocorreu um erro ao processar sua solicitação.',
+      });
+    }
   };
 
   return (
@@ -23,7 +35,6 @@ const Login: React.FC = () => {
             name="login"
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
           >
             <Form.Item
               name="username"
